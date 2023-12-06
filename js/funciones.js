@@ -1,9 +1,9 @@
-//const url = 'https://api-2670689.onrender.com/usuario'
-const url = 'https://apiparaconsumo.onrender.com/venta'
+const url = 'http://localhost:8787/venta'
+// const url = 'https://apiparaconsumo.onrender.com/venta'
 
 const listarVentas = async() => {
     //Objeto del html donde se deslegará la información
-    let objectId = document.getElementById('contenido') 
+    let objectId = document.getElementById ('contenido') 
     let contenido = ''//Contiene filas y celdas que se desplegarán en el tbody
 
     //Fecth permite reaizar peticiones http a una url
@@ -27,6 +27,7 @@ const listarVentas = async() => {
             `<td>`+venta.correo+`</td>`+
             `<td>`+venta.telefono+`</td>`+
             `<td>`+venta.producto+`</td>`+
+            `<td>`+venta.precioDolar+`</td>`+
             `<td>`+venta.estado+`</td>`+
             `<td><button onclick="redireccionarEditar('${objetoVenta}')">Editar</button>
             <button onclick="eliminarVenta('${venta.nombreCliente}')">Eliminar</button></td>`+
@@ -51,6 +52,7 @@ const registrarVenta= () => {
     const correo = document.getElementById('correo').value
     const telefono = document.getElementById('telefono').value
     const producto = document.getElementById('producto').value
+    const precioDolar = document.getElementById('precioDolar').value
     const estado = document.getElementById('estado').value
 
     if(nombreCliente.length == 0){
@@ -70,6 +72,9 @@ const registrarVenta= () => {
     else if(producto == ""){
         document.getElementById('productoHelp').innerHTML = 'Dato requerido'
     }
+    else if(precioDolar.length == 0){
+        document.getElementById('precioHelp').innerHTML = 'Dato requerido'
+    }  
     else if(estado == ""){
         document.getElementById('estadoHelp').innerHTML = 'Dato requerido'
     }
@@ -81,6 +86,7 @@ const registrarVenta= () => {
             correo: correo,
             telefono: telefono,
             producto: producto,
+            precioDolar: parseFloat(precioDolar),
             estado: estado
         }
         
@@ -106,6 +112,7 @@ const actualizarVenta= () => {
     const correo = document.getElementById('correo').value
     const telefono = document.getElementById('telefono').value
     const producto = document.getElementById('producto').value
+    const precioDolar = document.getElementById('precioDolar').value
     const estado = document.getElementById('estado').value
 
     if(nombreCliente.length == 0){
@@ -125,6 +132,9 @@ const actualizarVenta= () => {
     else if(producto == ""){
         document.getElementById('productoHelp').innerHTML = 'Dato requerido'
     }
+    else if(precioDolar.length == 0){
+        document.getElementById('precioHelp').innerHTML = 'Dato requerido'
+    } 
     else if(estado == ""){
         document.getElementById('estadoHelp').innerHTML = 'Dato requerido'
     }
@@ -135,6 +145,7 @@ const actualizarVenta= () => {
             correo: correo,
             telefono: telefono,
             producto: producto,
+            precioDolar: parseFloat(precioDolar),
             estado: estado
         }
         
@@ -152,10 +163,28 @@ const actualizarVenta= () => {
         })
         }
 }
+const precioDolarInput = document.getElementById('precioDolar');
 
+// Realiza una solicitud a la API
+fetch('https://www.datos.gov.co/resource/mcec-87by.json')
+    .then(response => response.json())
+    .then(data => {
+        // Suponiendo que los datos de la API tienen una propiedad 'precioDolar'
+        const precioDolar = data[0].valor; 
+
+        // Asigna el precio del dólar a la caja de texto
+        precioDolarInput.value = precioDolar;
+    })
+    .catch(error => {
+        console.error('Error al obtener el precio del dólar:', error);
+    });
+
+    
 const redireccionarEditar = (objetoVenta) => {
     document.location.href='editarVenta.html?venta='+objetoVenta
 }
+
+
 
 const editarVenta = () => {
     // Obtener datos de la url
@@ -166,6 +195,7 @@ const editarVenta = () => {
     document.getElementById('correo').value = urlParams.get('correo')
     document.getElementById('telefono').value = urlParams.get('telefono')
     document.getElementById('producto').value = urlParams.get('producto')
+    document.getElementById('precioDolar').value = urlParams.get('precioDolar')
     document.getElementById('estado').value = urlParams.get('estado')
 }
 
