@@ -1,5 +1,5 @@
 //const url = 'http://localhost:8787/venta'
-const url = 'https://apiventas-dvb9.onrender.com'
+const url = 'https://apiventas-dvb9.onrender.com/venta'
 
 const listarVentas = async() => {
     //Objeto del html donde se deslegará la información
